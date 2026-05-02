@@ -20,9 +20,24 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        String token = authService.login(request.email(), request.password());
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
+
     public record RegisterRequest(
             @JsonProperty("name") String name,
             @JsonProperty("email") String email,
             @JsonProperty("password") String password
+    ) {}
+
+    public record LoginRequest(
+            @JsonProperty("email") String email,
+            @JsonProperty("password") String password
+    ) {}
+
+    public record AuthResponse(
+            @JsonProperty("token") String token
     ) {}
 }
